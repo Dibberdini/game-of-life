@@ -27,6 +27,7 @@ function setup() {
   //Populate all cells with an initial value of 0.
   reset();
 
+  //Create initial glider
   cells[0][0] = 1;
   cells[0][2] = 1;
   cells[1][1] = 1;
@@ -169,6 +170,7 @@ function reset() {
   }
 }
 
+//Flip cell state at mouse position
 function mouseClicked() {
   if (cells[Math.floor(mouseX / size)][Math.floor(mouseY / size)] == STATES.DEAD) {
     cells[Math.floor(mouseX / size)][Math.floor(mouseY / size)] = STATES.ALIVE;
@@ -182,11 +184,11 @@ function mouseDragged() {
 }
 
 function keyPressed() {
-  if (keyCode == 75) {
+  if (keyCode == 75) { //K toggles live-mode
     live = !live;
-  } else if (keyCode == 82) {
+  } else if (keyCode == 82) { //R resets
     reset();
-  } else if (keyCode == 84) {
+  } else if (keyCode == 84) { //T toggles wrap-mode
     wrap = !wrap;
   }
 }
