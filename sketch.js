@@ -4,7 +4,7 @@ let cells = [];
 let buffercells = [];
 let live = true;
 let wrap = true;
-
+let draggedcells = []
 
 const STATES = {
   DEAD: 0,
@@ -114,9 +114,11 @@ function updateCells() {
   }
 }
 
+//Get living neighbours for a given cell.
 function getNeighbours(x, y) {
   let neighbours = 0;
 
+  //Check a 3x3 grid centered around the input coordinates.
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       if (cells[x + i] && cells[y + j]) {
@@ -129,9 +131,13 @@ function getNeighbours(x, y) {
   return neighbours;
 }
 
+//Get living neighbours for a given cell.
+//Wraps around if input cell in along an edge.
 function getNeighboursWrapped(x, y) {
   let neighbours = 0;
 
+  //Check a 3z3 grid centered around the input coordinates.
+  //If a row/column doesn't exist wrap around the full grid.
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       if (cells[x + i] && cells[y + j]) {
@@ -161,26 +167,41 @@ function getNeighboursWrapped(x, y) {
   return neighbours;
 }
 
+//Reset all cells to the 'dead' state.
 function reset() {
   for (let i = 0; i < cells.length; i++) {
     for (let j = 0; j < cells[i].length; j++) {
-      cells[i][j] = 0;
-      buffercells[i][j] = 0;
+      cells[i][j] = STATES.DEAD;
+      buffercells[i][j] = STATES.DEAD;
     }
   }
 }
 
 //Flip cell state at mouse position
-function mouseClicked() {
-  if (cells[Math.floor(mouseX / size)][Math.floor(mouseY / size)] == STATES.DEAD) {
-    cells[Math.floor(mouseX / size)][Math.floor(mouseY / size)] = STATES.ALIVE;
+function flipCell(x,y) {
+  if (cells[x][y] == STATES.DEAD) {
+    cells[x][y] = STATES.ALIVE;
   } else {
-    cells[Math.floor(mouseX / size)][Math.floor(mouseY / size)] = STATES.DEAD;
+    cells[x][y] = STATES.DEAD;
   }
 }
 
+
+function mousePressed() {
+  flipCell(Math.floor(mouseX / size), Math.floor(mouseY / size))
+  draggedcells.push(Math.floor(mouseX/size) + "," + Math.floor(mouseY/size));
+}
+
 function mouseDragged() {
-  mouseClicked();
+  let cell = Math.floor(mouseX/size) + "," + Math.floor(mouseY/size)
+  if(!draggedcells.includes(cell)) {
+    draggedcells.push(cell);
+    flipCell(Math.floor(mouseX/size), Math.floor(mouseY / size))
+  }
+}
+
+function mouseReleased() {
+  draggedcells = [];
 }
 
 function keyPressed() {
