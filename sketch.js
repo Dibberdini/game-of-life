@@ -136,7 +136,7 @@ function getNeighbours(x, y) {
 function getNeighboursWrapped(x, y) {
   let neighbours = 0;
 
-  //Check a 3z3 grid centered around the input coordinates.
+  //Check a 3x3 grid centered around the input coordinates.
   //If a row/column doesn't exist wrap around the full grid.
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
